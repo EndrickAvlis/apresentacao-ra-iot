@@ -1,0 +1,242 @@
+:root {
+  --amarelo: #ffe81f;
+  --ciano: #00f0ff;
+  --verde: #00ff66;
+  --vermelho: #ff3344;
+  --fundo: #030712;
+  --painel: rgba(8, 16, 32, 0.85);
+  --texto: #e2e8f0;
+  --texto-suave: #94a3b8;
+  --cor-status: var(--verde);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(0, 240, 255, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.04) 0 1px, transparent 2px) 0 0 / 40px 40px,
+    var(--fundo);
+  color: var(--texto);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+body { display: flex; flex-direction: column; min-height: 100dvh; }
+
+/* ---------- Topo ---------- */
+.topo { padding: 18px 20px 6px; text-align: center; }
+
+.topo-tag {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 2.5px;
+  color: var(--ciano);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topo h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 1.45rem;
+  letter-spacing: 2px;
+  color: var(--amarelo);
+  text-shadow: 0 0 20px rgba(255, 232, 31, 0.5);
+  margin-top: 4px;
+}
+
+.pulso {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--verde);
+  box-shadow: 0 0 8px var(--verde);
+  animation: pulso 1.4s infinite;
+}
+
+@keyframes pulso {
+  0%, 100% { opacity: 0.5; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+/* ---------- Visualizador 3D ---------- */
+model-viewer {
+  flex: 1;
+  width: 100%;
+  min-height: 62dvh;
+  --poster-color: transparent;
+  --progress-bar-color: transparent;
+}
+
+/* ---------- Etiquetas dos sensores ---------- */
+.sensor {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  pointer-events: none;
+  transform: translate(-6px, 0);
+}
+
+.sensor-ponto {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--cor-status);
+  box-shadow: 0 0 10px var(--cor-status);
+  border: 2px solid #fff;
+  flex-shrink: 0;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.sensor-info {
+  background: rgba(5, 12, 24, 0.9);
+  border: 1px solid var(--ciano);
+  border-radius: 6px;
+  padding: 3px 9px;
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s;
+}
+
+.sensor-nome {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 1px;
+  color: var(--texto-suave);
+}
+
+.sensor-info strong {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cor-status);
+  transition: color 0.3s;
+}
+
+.sensor[data-visible="false"] { opacity: 0.25; }
+
+/* ---------- Botão de RA ---------- */
+.btn-ra {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--amarelo);
+  color: #050b14;
+  border: none;
+  border-radius: 30px;
+  padding: 13px 26px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  box-shadow: 0 0 22px rgba(255, 232, 31, 0.55);
+  white-space: nowrap;
+  animation: chamar 2s infinite;
+}
+
+@keyframes chamar {
+  0%, 100% { box-shadow: 0 0 14px rgba(255, 232, 31, 0.4); }
+  50% { box-shadow: 0 0 30px rgba(255, 232, 31, 0.85); }
+}
+
+/* ---------- Carregamento ---------- */
+.carregando {
+  position: absolute;
+  bottom: 50%;
+  left: 20%;
+  width: 60%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.carregando.oculto { display: none; }
+
+.carregando-barra {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--ciano), var(--amarelo));
+  transition: width 0.2s;
+}
+
+/* ---------- Painel de controle ---------- */
+.painel {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.status {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--painel);
+  border: 1px solid var(--cor-status);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--cor-status);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.status-luz {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--cor-status);
+  box-shadow: 0 0 10px var(--cor-status);
+  animation: pulso 1.4s infinite;
+  flex-shrink: 0;
+}
+
+.btn-falha {
+  background: rgba(255, 51, 68, 0.15);
+  border: 1px solid var(--vermelho);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.btn-falha:active { transform: scale(0.96); }
+
+/* ---------- Modo falha ---------- */
+body.falha { --cor-status: var(--vermelho); }
+body.falha .sensor-info { border-color: var(--vermelho); }
+body.falha .btn-falha {
+  background: rgba(0, 255, 102, 0.15);
+  border-color: var(--verde);
+}
+body.falha .status-luz { animation-duration: 0.4s; }
+
+/* ---------- Instruções ---------- */
+.instrucoes {
+  padding: 14px 22px 26px;
+  text-align: center;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--texto-suave);
+}
+
+.instrucoes strong { color: var(--amarelo); }
+
+.dica-sem-ra { display: none; }
+body.sem-ra #dicaRa { display: none; }
+body.sem-ra .dica-sem-ra { display: block; }

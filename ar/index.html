@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#030712">
+  <title>Turbina IoT em Realidade Aumentada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+  <link rel="stylesheet" href="ar.css">
+</head>
+<body>
+
+  <header class="topo">
+    <span class="topo-tag"><span class="pulso"></span> SENSORES IoT CONECTADOS</span>
+    <h1>TURBINA INTELIGENTE</h1>
+  </header>
+
+  <model-viewer
+    id="turbina"
+    src="turbina.glb"
+    alt="Turbina eólica 3D com sensores IoT"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    ar-scale="auto"
+    ar-placement="floor"
+    camera-controls
+    touch-action="pan-y"
+    auto-rotate
+    auto-rotate-delay="0"
+    rotation-per-second="18deg"
+    autoplay
+    animation-name="Girar"
+    camera-orbit="35deg 75deg auto"
+    min-camera-orbit="auto auto 0.5m"
+    shadow-intensity="1"
+    shadow-softness="0.8"
+    exposure="1.1"
+    environment-image="neutral"
+    interaction-prompt="none">
+
+    <!-- Etiquetas de sensores (aparecem em 3D e dentro da RA) -->
+    <div class="sensor" slot="hotspot-temp" data-position="0 0.50 -0.01" data-normal="0 1 0">
+      <span class="sensor-ponto"></span>
+      <div class="sensor-info">
+        <span class="sensor-nome">TEMPERATURA</span>
+        <strong id="vTemp">--</strong>
+      </div>
+    </div>
+
+    <div class="sensor" slot="hotspot-rpm" data-position="0 0.465 0.10" data-normal="0 0 1">
+      <span class="sensor-ponto"></span>
+      <div class="sensor-info">
+        <span class="sensor-nome">ROTAÇÃO</span>
+        <strong id="vRpm">--</strong>
+      </div>
+    </div>
+
+    <div class="sensor" slot="hotspot-vib" data-position="0.024 0.20 0" data-normal="1 0 0">
+      <span class="sensor-ponto"></span>
+      <div class="sensor-info">
+        <span class="sensor-nome">VIBRAÇÃO</span>
+        <strong id="vVib">--</strong>
+      </div>
+    </div>
+
+    <div class="sensor" slot="hotspot-energia" data-position="0.08 0.01 0" data-normal="1 0 0">
+      <span class="sensor-ponto"></span>
+      <div class="sensor-info">
+        <span class="sensor-nome">ENERGIA</span>
+        <strong id="vEnergia">--</strong>
+      </div>
+    </div>
+
+    <!-- Botão de RA (só aparece em celulares compatíveis) -->
+    <button slot="ar-button" class="btn-ra">
+      VER NA MINHA MESA
+    </button>
+
+    <!-- Barra de carregamento -->
+    <div slot="progress-bar" class="carregando" id="carregando">
+      <div class="carregando-barra" id="carregandoBarra"></div>
+    </div>
+
+    <!-- Painel de controle (também visível dentro da RA) -->
+    <div class="painel">
+      <div class="status" id="status">
+        <span class="status-luz"></span>
+        <span id="statusTexto">OPERAÇÃO NORMAL</span>
+      </div>
+      <button class="btn-falha" id="btnFalha">SIMULAR FALHA</button>
+    </div>
+  </model-viewer>
+
+  <section class="instrucoes" id="instrucoes">
+    <p id="dicaRa">Toque em <strong>VER NA MINHA MESA</strong> e aponte a câmera para o chão ou para a mesa. Mova o celular devagar até a turbina aparecer.</p>
+    <p class="dica-sem-ra" id="dicaSemRa">Seu celular não tem suporte a RA, mas você pode girar a turbina com o dedo e testar os sensores.</p>
+  </section>
+
+  <script src="ar.js"></script>
+</body>
+</html>
