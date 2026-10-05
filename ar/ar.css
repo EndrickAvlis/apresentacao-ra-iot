@@ -3,68 +3,132 @@
   --ciano: #00f0ff;
   --verde: #00ff66;
   --vermelho: #ff3344;
+  --azul-gelo: #38bdf8;
+  --roxo: #c084fc;
   --fundo: #030712;
-  --painel: rgba(8, 16, 32, 0.85);
+  --painel: rgba(8, 16, 32, 0.88);
   --texto: #e2e8f0;
   --texto-suave: #94a3b8;
-  --cor-status: var(--verde);
+  --cor-status: var(--ciano);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
 
 html, body {
   height: 100%;
-  background:
+  background-color: var(--fundo);
+  background-image:
     radial-gradient(ellipse at 50% 0%, rgba(0, 240, 255, 0.12) 0%, transparent 60%),
-    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.04) 0 1px, transparent 2px) 0 0 / 40px 40px,
-    var(--fundo);
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.04) 0 1px, transparent 2px);
+  background-size: 100% 100%, 40px 40px;
   color: var(--texto);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
 }
 
-body { display: flex; flex-direction: column; min-height: 100dvh; }
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
 
 /* ---------- Topo ---------- */
-.topo { padding: 18px 20px 6px; text-align: center; }
+.topo {
+  padding: 14px 18px 4px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.topo-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 440px;
+  margin: 0 auto 4px;
+}
 
 .topo-tag {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.62rem;
-  letter-spacing: 2.5px;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
   color: var(--ciano);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+}
+
+.clima-badge {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--cor-status);
+  padding: 2px 10px;
+  border-radius: 12px;
+  color: var(--cor-status);
+  transition: all 0.3s ease;
 }
 
 .topo h1 {
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   letter-spacing: 2px;
   color: var(--amarelo);
   text-shadow: 0 0 20px rgba(255, 232, 31, 0.5);
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .pulso {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--verde);
-  box-shadow: 0 0 8px var(--verde);
-  animation: pulso 1.4s infinite;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor-status);
+  box-shadow: 0 0 8px var(--cor-status);
+  animation: pulsoAnim 1.4s infinite;
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
-@keyframes pulso {
+@keyframes pulsoAnim {
   0%, 100% { opacity: 0.5; transform: scale(0.85); }
-  50% { opacity: 1; transform: scale(1.15); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
-/* ---------- Visualizador 3D ---------- */
-model-viewer {
+/* ---------- Container 3D & Chuva ---------- */
+.viewer-container {
+  position: relative;
   flex: 1;
   width: 100%;
-  min-height: 62dvh;
+  min-height: 52dvh;
+  display: flex;
+  overflow: hidden;
+}
+
+#rainCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#rainCanvas.ativo {
+  opacity: 0.85;
+}
+
+model-viewer {
+  width: 100%;
+  height: 100%;
   --poster-color: transparent;
   --progress-bar-color: transparent;
 }
@@ -78,10 +142,13 @@ model-viewer {
   background: none;
   pointer-events: none;
   transform: translate(-6px, 0);
+  z-index: 8;
 }
 
 .sensor-ponto {
-  width: 12px; height: 12px; border-radius: 50%;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
   background: var(--cor-status);
   box-shadow: 0 0 10px var(--cor-status);
   border: 2px solid #fff;
@@ -90,33 +157,36 @@ model-viewer {
 }
 
 .sensor-info {
-  background: rgba(5, 12, 24, 0.9);
-  border: 1px solid var(--ciano);
+  background: rgba(5, 12, 24, 0.92);
+  border: 1px solid var(--cor-status);
   border-radius: 6px;
-  padding: 3px 9px;
+  padding: 3px 8px;
   display: flex;
   flex-direction: column;
   white-space: nowrap;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
   transition: border-color 0.3s;
+  backdrop-filter: blur(6px);
 }
 
 .sensor-nome {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.5rem;
+  font-size: 0.48rem;
   letter-spacing: 1px;
   color: var(--texto-suave);
 }
 
 .sensor-info strong {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--cor-status);
   transition: color 0.3s;
 }
 
-.sensor[data-visible="false"] { opacity: 0.25; }
+.sensor[data-visible="false"] {
+  opacity: 0.2;
+}
 
 /* ---------- Botão de RA ---------- */
 .btn-ra {
@@ -128,13 +198,14 @@ model-viewer {
   color: #050b14;
   border: none;
   border-radius: 30px;
-  padding: 13px 26px;
+  padding: 12px 26px;
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   letter-spacing: 1.5px;
-  box-shadow: 0 0 22px rgba(255, 232, 31, 0.55);
+  box-shadow: 0 0 20px rgba(255, 232, 31, 0.55);
   white-space: nowrap;
+  z-index: 10;
   animation: chamar 2s infinite;
 }
 
@@ -143,7 +214,7 @@ model-viewer {
   50% { box-shadow: 0 0 30px rgba(255, 232, 31, 0.85); }
 }
 
-/* ---------- Carregamento ---------- */
+/* ---------- Barra de Carregamento ---------- */
 .carregando {
   position: absolute;
   bottom: 50%;
@@ -155,7 +226,9 @@ model-viewer {
   overflow: hidden;
 }
 
-.carregando.oculto { display: none; }
+.carregando.oculto {
+  display: none;
+}
 
 .carregando-barra {
   height: 100%;
@@ -164,78 +237,175 @@ model-viewer {
   transition: width 0.2s;
 }
 
-/* ---------- Painel de controle ---------- */
-.painel {
+/* ---------- Banner de Diagnóstico ---------- */
+.status-banner {
   position: absolute;
   left: 12px;
   right: 12px;
-  bottom: 14px;
-  display: flex;
-  gap: 10px;
-  align-items: stretch;
-}
-
-.status {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  bottom: 12px;
   background: var(--painel);
   border: 1px solid var(--cor-status);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  transition: border-color 0.3s;
+}
+
+.status-icone {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--cor-status);
+  box-shadow: 0 0 10px var(--cor-status);
+  flex-shrink: 0;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.status-textos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.status-titulo {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 1px;
   color: var(--cor-status);
-  backdrop-filter: blur(8px);
-  transition: border-color 0.3s, color 0.3s;
+  transition: color 0.3s;
 }
 
-.status-luz {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--cor-status);
-  box-shadow: 0 0 10px var(--cor-status);
-  animation: pulso 1.4s infinite;
+.status-desc {
+  font-size: 0.76rem;
+  color: var(--texto-suave);
+  line-height: 1.35;
+  white-space: normal;
+}
+
+/* ---------- Painel de Cenários ---------- */
+.cenarios-painel {
+  padding: 8px 12px 6px;
+  background: rgba(6, 12, 24, 0.95);
+  border-top: 1px solid rgba(0, 240, 255, 0.18);
   flex-shrink: 0;
 }
 
-.btn-falha {
-  background: rgba(255, 51, 68, 0.15);
-  border: 1px solid var(--vermelho);
-  color: #fff;
-  border-radius: 10px;
-  padding: 10px 14px;
+.cenarios-header {
+  margin-bottom: 6px;
+  padding: 0 4px;
+}
+
+.cenarios-sub {
   font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  font-size: 0.68rem;
-  letter-spacing: 1px;
-  backdrop-filter: blur(8px);
+  font-size: 0.58rem;
+  letter-spacing: 1.5px;
+  color: var(--ciano);
+  opacity: 0.85;
+}
+
+.cenarios-botoes {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cenarios-botoes::-webkit-scrollbar {
+  display: none;
+}
+
+.btn-cenario {
+  flex-shrink: 0;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--texto);
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.btn-falha:active { transform: scale(0.96); }
-
-/* ---------- Modo falha ---------- */
-body.falha { --cor-status: var(--vermelho); }
-body.falha .sensor-info { border-color: var(--vermelho); }
-body.falha .btn-falha {
-  background: rgba(0, 255, 102, 0.15);
-  border-color: var(--verde);
+.btn-cenario:active {
+  transform: scale(0.96);
 }
-body.falha .status-luz { animation-duration: 0.4s; }
 
-/* ---------- Instruções ---------- */
+.cenario-indicador {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cenario-indicador.padrao { background: var(--ciano); box-shadow: 0 0 6px var(--ciano); }
+.cenario-indicador.tempestade { background: var(--amarelo); box-shadow: 0 0 6px var(--amarelo); }
+.cenario-indicador.superaquecimento { background: var(--vermelho); box-shadow: 0 0 6px var(--vermelho); }
+.cenario-indicador.calmaria { background: var(--azul-gelo); box-shadow: 0 0 6px var(--azul-gelo); }
+.cenario-indicador.freio { background: var(--roxo); box-shadow: 0 0 6px var(--roxo); }
+
+.cenario-nome {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+}
+
+/* Estados Ativos dos Botões */
+.btn-cenario.ativo {
+  border-color: var(--cor-status);
+  background: rgba(0, 240, 255, 0.12);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.2);
+}
+
+.btn-cenario[data-cenario="tempestade"].ativo {
+  border-color: var(--amarelo);
+  background: rgba(255, 232, 31, 0.12);
+  box-shadow: 0 0 14px rgba(255, 232, 31, 0.2);
+}
+
+.btn-cenario[data-cenario="superaquecimento"].ativo {
+  border-color: var(--vermelho);
+  background: rgba(255, 51, 68, 0.15);
+  box-shadow: 0 0 14px rgba(255, 51, 68, 0.25);
+}
+
+.btn-cenario[data-cenario="calmaria"].ativo {
+  border-color: var(--azul-gelo);
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
+}
+
+.btn-cenario[data-cenario="freio"].ativo {
+  border-color: var(--roxo);
+  background: rgba(192, 132, 252, 0.15);
+  box-shadow: 0 0 14px rgba(192, 132, 252, 0.25);
+}
+
+/* ---------- Instruções no Rodapé ---------- */
 .instrucoes {
-  padding: 14px 22px 26px;
+  padding: 10px 18px 18px;
   text-align: center;
-  font-size: 0.88rem;
-  line-height: 1.5;
+  font-size: 0.82rem;
+  line-height: 1.45;
   color: var(--texto-suave);
+  flex-shrink: 0;
 }
 
-.instrucoes strong { color: var(--amarelo); }
+.instrucoes strong {
+  color: var(--amarelo);
+}
 
 .dica-sem-ra { display: none; }
 body.sem-ra #dicaRa { display: none; }

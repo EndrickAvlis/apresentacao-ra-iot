@@ -1,40 +1,134 @@
 /* ============================================================
-   TURBINA IoT EM RA - sensores simulados em tempo real
+   TURBINA IoT EM REALIDADE AUMENTADA - MÚLTIPLOS CENÁRIOS
    ============================================================ */
 
 const mv = document.getElementById('turbina');
-const btnFalha = document.getElementById('btnFalha');
-const statusTexto = document.getElementById('statusTexto');
+const climaBadge = document.getElementById('climaBadge');
+const statusBanner = document.getElementById('statusBanner');
+const statusTitulo = document.getElementById('statusTitulo');
+const statusDesc = document.getElementById('statusDesc');
+const statusIcone = document.getElementById('statusIcone');
+const pulsoGlobal = document.getElementById('pulsoGlobal');
+const botoesCenarios = document.querySelectorAll('.btn-cenario');
 
 const campos = {
+  vento: document.getElementById('vVento'),
   temp: document.getElementById('vTemp'),
   rpm: document.getElementById('vRpm'),
   vib: document.getElementById('vVib'),
   energia: document.getElementById('vEnergia')
 };
 
-let emFalha = false;
+// ------------------------------------------------------------
+// Configuração dos Cenários Operacionais e Climáticos
+// ------------------------------------------------------------
+const CENARIOS = {
+  padrao: {
+    clima: 'CLIMA: ESTÁVEL',
+    titulo: 'OPERAÇÃO NORMAL // EFICIÊNCIA MÁXIMA',
+    desc: 'Brisa moderada contínua. Sistema IoT operando com parâmetros ótimos.',
+    corHex: '#00f0ff',
+    corGL: [0.0, 0.94, 1.0],
+    speed: 1.0,
+    vento: [32, 38],
+    temp: [68, 74],
+    rpm: [1480, 1560],
+    vib: [0.06, 0.12],
+    energia: [2.35, 2.55],
+    chuva: false,
+    vibrar: false
+  },
+  tempestade: {
+    clima: 'CLIMA: TEMPESTADE',
+    titulo: 'VENTO SEVERO // ALTA ROTAÇÃO',
+    desc: 'Anemômetro acusa rajadas fortes de vento e chuva. Sistema ajusta ângulo de pitch das pás.',
+    corHex: '#ffe81f',
+    corGL: [1.0, 0.9, 0.15],
+    speed: 1.85,
+    vento: [78, 92],
+    temp: [79, 86],
+    rpm: [2150, 2350],
+    vib: [0.85, 1.30],
+    energia: [3.10, 3.45],
+    chuva: true,
+    vibrar: [120]
+  },
+  superaquecimento: {
+    clima: 'CLIMA: CRÍTICO',
+    titulo: 'ALERTA TÉRMICO // SUPERAQUECIMENTO NO EIXO',
+    desc: 'Sensores IoT acusam temperatura e vibração anormais. Risco iminente de dano mecânico.',
+    corHex: '#ff3344',
+    corGL: [1.0, 0.15, 0.22],
+    speed: 2.9,
+    vento: [40, 48],
+    temp: [116, 128],
+    rpm: [2750, 2980],
+    vib: [2.30, 3.10],
+    energia: [0.45, 0.80],
+    chuva: false,
+    vibrar: [200, 100, 200]
+  },
+  calmaria: {
+    clima: 'CLIMA: SEM VENTO',
+    titulo: 'STANDBY // BAIXA VELOCIDADE DO VENTO',
+    desc: 'Velocidade do ar abaixo do corte inicial. Rotor desacelerado em estado de espera.',
+    corHex: '#38bdf8',
+    corGL: [0.22, 0.70, 0.98],
+    speed: 0.12,
+    vento: [2, 6],
+    temp: [35, 42],
+    rpm: [75, 140],
+    vib: [0.01, 0.03],
+    energia: [0.02, 0.06],
+    chuva: false,
+    vibrar: false
+  },
+  freio: {
+    clima: 'CLIMA: BLOQUEIO',
+    titulo: 'PROTEÇÃO IoT // FREIO HIDRÁULICO ATIVADO',
+    desc: 'Vento extremo detectado. IoT travou o rotor imediatamente para evitar quebra da estrutura.',
+    corHex: '#c084fc',
+    corGL: [0.85, 0.45, 1.0],
+    speed: 0.0,
+    vento: [98, 116],
+    temp: [60, 66],
+    rpm: [0, 0],
+    vib: [0.02, 0.04],
+    energia: [0.00, 0.00],
+    chuva: false,
+    vibrar: [300]
+  }
+};
 
-// Faixas de valores dos "sensores"
-const NORMAL = { temp: [68, 76], rpm: [1480, 1560], vib: [0.05, 0.12], energia: [2.3, 2.6] };
-const FALHA  = { temp: [112, 124], rpm: [2650, 2900], vib: [2.1, 2.9], energia: [0.4, 0.9] };
+let cenarioAtualChave = 'padrao';
 
 function aleatorio([min, max]) {
   return min + Math.random() * (max - min);
 }
 
 function atualizarSensores() {
-  const f = emFalha ? FALHA : NORMAL;
-  campos.temp.textContent = `${aleatorio(f.temp).toFixed(1)} °C`;
-  campos.rpm.textContent = `${Math.round(aleatorio(f.rpm)).toLocaleString('pt-BR')} RPM`;
-  campos.vib.textContent = `${aleatorio(f.vib).toFixed(2)} mm/s`;
-  campos.energia.textContent = `${aleatorio(f.energia).toFixed(2)} MW`;
+  const c = CENARIOS[cenarioAtualChave];
+  if (!c) return;
+
+  if (c.rpm[0] === 0 && c.rpm[1] === 0) {
+    campos.rpm.textContent = '0 RPM [TRAVADO]';
+    campos.energia.textContent = '0.00 MW [DESCONECTADO]';
+  } else {
+    campos.rpm.textContent = `${Math.round(aleatorio(c.rpm)).toLocaleString('pt-BR')} RPM`;
+    campos.energia.textContent = `${aleatorio(c.energia).toFixed(2)} MW`;
+  }
+
+  campos.vento.textContent = `${Math.round(aleatorio(c.vento))} km/h`;
+  campos.temp.textContent = `${aleatorio(c.temp).toFixed(1)} °C`;
+  campos.vib.textContent = `${aleatorio(c.vib).toFixed(2)} mm/s`;
 }
 
-setInterval(atualizarSensores, 900);
+setInterval(atualizarSensores, 850);
 atualizarSensores();
 
-// Cor das luzes de status no próprio modelo 3D
+// ------------------------------------------------------------
+// Ajuste das Luzes e Rotação do Modelo 3D
+// ------------------------------------------------------------
 function pintarModelo(cor) {
   if (!mv.model) return;
   const mat = mv.model.materials.find(m => m.name === 'Status');
@@ -43,38 +137,154 @@ function pintarModelo(cor) {
   mat.setEmissiveFactor(cor);
 }
 
-function alternarFalha() {
-  emFalha = !emFalha;
-  document.body.classList.toggle('falha', emFalha);
+function aplicarCenario(chave) {
+  const c = CENARIOS[chave];
+  if (!c) return;
 
-  statusTexto.textContent = emFalha ? 'ALERTA: SUPERAQUECIMENTO' : 'OPERAÇÃO NORMAL';
-  btnFalha.textContent = emFalha ? 'NORMALIZAR' : 'SIMULAR FALHA';
+  cenarioAtualChave = chave;
+  document.documentElement.style.setProperty('--cor-status', c.corHex);
 
-  pintarModelo(emFalha ? [1, 0.2, 0.27] : [0, 0.94, 1]);
-  mv.timeScale = emFalha ? 3 : 1;
+  // Atualiza textos
+  climaBadge.textContent = c.clima;
+  statusTitulo.textContent = c.titulo;
+  statusDesc.textContent = c.desc;
 
-  if (emFalha && navigator.vibrate) navigator.vibrate([200, 100, 200]);
+  // Atualiza botões
+  botoesCenarios.forEach(btn => {
+    btn.classList.toggle('ativo', btn.getAttribute('data-cenario') === chave);
+  });
+
+  // Atualiza modelo 3D
+  pintarModelo(c.corGL);
+  mv.timeScale = c.speed;
+
+  // Atualiza chuva
+  alternarChuva(c.chuva);
+
+  // Vibração no celular
+  if (c.vibrar && navigator.vibrate) {
+    navigator.vibrate(c.vibrar);
+  }
+
   atualizarSensores();
 }
 
-btnFalha.addEventListener('click', alternarFalha);
+// Ouvintes dos botões de cenários
+botoesCenarios.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const chave = btn.getAttribute('data-cenario');
+    aplicarCenario(chave);
+  });
+});
 
-// Barra de carregamento
+// ------------------------------------------------------------
+// Sistema de Chuva Dinâmica em Canvas (Leve e Eficiente)
+// ------------------------------------------------------------
+const rainCanvas = document.getElementById('rainCanvas');
+const rCtx = rainCanvas.getContext('2d');
+let gotas = [];
+let chuvaAtiva = false;
+let animacaoId = null;
+
+function redimensionarCanvasChuva() {
+  const retangulo = rainCanvas.parentElement.getBoundingClientRect();
+  rainCanvas.width = retangulo.width;
+  rainCanvas.height = retangulo.height;
+  criarGotas();
+}
+
+function criarGotas() {
+  gotas = [];
+  const qtd = Math.min(85, Math.floor(rainCanvas.width / 5));
+  for (let i = 0; i < qtd; i++) {
+    gotas.push({
+      x: Math.random() * rainCanvas.width,
+      y: Math.random() * rainCanvas.height,
+      l: Math.random() * 18 + 10,
+      v: Math.random() * 8 + 14,
+      o: Math.random() * 0.4 + 0.2
+    });
+  }
+}
+
+function animarChuva() {
+  if (!chuvaAtiva) return;
+  rCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+
+  rCtx.strokeStyle = 'rgba(180, 230, 255, 0.45)';
+  rCtx.lineWidth = 1.3;
+  rCtx.lineCap = 'round';
+
+  const ventoInclinacao = 5;
+
+  for (let i = 0; i < gotas.length; i++) {
+    const g = gotas[i];
+    rCtx.beginPath();
+    rCtx.moveTo(g.x, g.y);
+    rCtx.lineTo(g.x + ventoInclinacao, g.y + g.l);
+    rCtx.stroke();
+
+    g.y += g.v;
+    g.x += ventoInclinacao;
+
+    if (g.y > rainCanvas.height) {
+      g.y = -20;
+      g.x = Math.random() * (rainCanvas.width + 100) - 50;
+    }
+  }
+
+  animacaoId = requestAnimationFrame(animarChuva);
+}
+
+function alternarChuva(ligar) {
+  chuvaAtiva = ligar;
+  rainCanvas.classList.toggle('ativo', ligar);
+
+  if (ligar) {
+    if (!animacaoId) {
+      animarChuva();
+    }
+  } else {
+    if (animacaoId) {
+      cancelAnimationFrame(animacaoId);
+      animacaoId = null;
+    }
+    rCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+  }
+}
+
+window.addEventListener('resize', redimensionarCanvasChuva);
+setTimeout(redimensionarCanvasChuva, 300);
+
+// ------------------------------------------------------------
+// Eventos do Model Viewer
+// ------------------------------------------------------------
 mv.addEventListener('progress', (e) => {
   const p = e.detail.totalProgress;
-  document.getElementById('carregandoBarra').style.width = `${p * 100}%`;
-  if (p >= 1) document.getElementById('carregando').classList.add('oculto');
+  const barra = document.getElementById('carregandoBarra');
+  if (barra) barra.style.width = `${p * 100}%`;
+  if (p >= 1) {
+    const c = document.getElementById('carregando');
+    if (c) c.classList.add('oculto');
+  }
 });
 
 mv.addEventListener('load', () => {
-  pintarModelo(emFalha ? [1, 0.2, 0.27] : [0, 0.94, 1]);
-  // Mostra a dica certa conforme o suporte a RA do aparelho
+  aplicarCenario(cenarioAtualChave);
   setTimeout(() => {
-    if (!mv.canActivateAR) document.body.classList.add('sem-ra');
+    if (!mv.canActivateAR) {
+      document.body.classList.add('sem-ra');
+    }
   }, 600);
 });
 
-// Ao entrar na RA, para de girar sozinho para facilitar o posicionamento
+// Para de girar automaticamente ao entrar em sessão de RA
 mv.addEventListener('ar-status', (e) => {
   mv.autoRotate = e.detail.status !== 'session-started';
+  // Reduz chuva dentro da câmera para priorizar visão do mundo real
+  if (e.detail.status === 'session-started') {
+    rainCanvas.style.display = 'none';
+  } else {
+    rainCanvas.style.display = 'block';
+  }
 });

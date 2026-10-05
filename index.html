@@ -193,13 +193,21 @@
                       <strong id="valVib">0.08 mm/s [OK]</strong>
                     </div>
                   </div>
+                  <div class="ar-pin pin-4" id="pinVento">
+                    <div class="pin-marker"></div>
+                    <div class="pin-popup">
+                      <span class="label">VENTO / CLIMA</span>
+                      <strong id="valVento">35 km/h [ESTÁVEL]</strong>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="demo-controls">
-                <button class="sim-btn" onclick="simulateAnomaly()">Simular Falha no Sensor</button>
-                <button class="sim-btn reset" onclick="resetAnomaly()">Normalizar Sistema</button>
+                <button class="sim-btn" onclick="setSlideScenario('normal')">Padrão</button>
+                <button class="sim-btn" onclick="setSlideScenario('vento')">Chuva & Vento</button>
+                <button class="sim-btn" onclick="setSlideScenario('falha')">Superaquecimento</button>
               </div>
-              <p class="demo-hint">*Demonstração interativa da resposta da RA aos dados de IoT.</p>
+              <p class="demo-hint">*Clique nos botões para simular diferentes condições climáticas e operacionais.</p>
             </div>
           </div>
         </div>
@@ -509,8 +517,8 @@
             <div class="passo passo-alerta">
               <span class="passo-num">4</span>
               <div>
-                <h4>Simule uma falha</h4>
-                <p>Veja a RA reagir na hora: a turbina acelera e os dados ficam vermelhos.</p>
+                <h4>Troque os cenários</h4>
+                <p>Alterne entre Chuva, Vento Forte, Superaquecimento, Calmaria e Freio de Emergência para ver a turbina reagir no seu espaço.</p>
               </div>
             </div>
           </div>

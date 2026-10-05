@@ -308,29 +308,43 @@ if (btnNext) btnNext.addEventListener('click', nextSlide);
 // ============================================================
 // SIMULADOR INTERATIVO DA TURBINA NO SLIDE 3
 // ============================================================
-function simulateAnomaly() {
+function setSlideScenario(cenario) {
   const panel = document.querySelector('.interactive-demo-panel');
   if (!panel) return;
 
-  panel.classList.add('has-anomaly');
-  document.getElementById('valTemp').textContent = '118°C [ALERTA CRÍTICO]';
-  document.getElementById('valRpm').textContent = '5.180 RPM [SOBRECARGA]';
-  document.getElementById('valVib').textContent = '2.45 mm/s [ANORMAL]';
-  
-  sounds.playAlarmWarning();
+  const vTemp = document.getElementById('valTemp');
+  const vRpm = document.getElementById('valRpm');
+  const vVib = document.getElementById('valVib');
+  const vVento = document.getElementById('valVento');
+
+  panel.classList.remove('has-anomaly', 'has-wind');
+
+  if (cenario === 'vento') {
+    panel.classList.add('has-wind');
+    if (vTemp) vTemp.textContent = '82°C [ALTO]';
+    if (vRpm) vRpm.textContent = '4.250 RPM [VENTO FORTE]';
+    if (vVib) vVib.textContent = '1.10 mm/s [MODERADA]';
+    if (vVento) vVento.textContent = '85 km/h [TEMPESTADE]';
+    sounds.playCommlinkBeep();
+  } else if (cenario === 'falha') {
+    panel.classList.add('has-anomaly');
+    if (vTemp) vTemp.textContent = '118°C [ALERTA CRÍTICO]';
+    if (vRpm) vRpm.textContent = '5.180 RPM [SOBRECARGA]';
+    if (vVib) vVib.textContent = '2.45 mm/s [ANORMAL]';
+    if (vVento) vVento.textContent = '44 km/h [MODERADO]';
+    sounds.playAlarmWarning();
+  } else {
+    // Normal / Padrão
+    if (vTemp) vTemp.textContent = '74°C [NORMAL]';
+    if (vRpm) vRpm.textContent = '3.420 RPM';
+    if (vVib) vVib.textContent = '0.08 mm/s [OK]';
+    if (vVento) vVento.textContent = '35 km/h [ESTÁVEL]';
+    sounds.playCommlinkBeep();
+  }
 }
 
-function resetAnomaly() {
-  const panel = document.querySelector('.interactive-demo-panel');
-  if (!panel) return;
-
-  panel.classList.remove('has-anomaly');
-  document.getElementById('valTemp').textContent = '74°C [NORMAL]';
-  document.getElementById('valRpm').textContent = '3.420 RPM';
-  document.getElementById('valVib').textContent = '0.08 mm/s [OK]';
-
-  sounds.playCommlinkBeep();
-}
+function simulateAnomaly() { setSlideScenario('falha'); }
+function resetAnomaly() { setSlideScenario('normal'); }
 
 // ============================================================
 // ATALHOS DE TECLADO (APRESENTAÇÃO)

@@ -686,7 +686,8 @@ html, body {
 
 .pin-1 { top: -20px; right: -95px; }
 .pin-2 { bottom: -20px; right: -90px; }
-.pin-3 { top: 40px; left: -130px; }
+.pin-3 { top: 30px; left: -135px; }
+.pin-4 { bottom: -30px; left: -135px; }
 
 .pin-marker {
   width: 10px;
@@ -733,6 +734,24 @@ html, body {
 .interactive-demo-panel.has-anomaly #pinTemp .pin-marker {
   background: #ff3344;
   box-shadow: 0 0 12px #ff3344;
+}
+
+.interactive-demo-panel.has-wind .turbine-core {
+  background: radial-gradient(circle, #ffe81f 0%, #b45309 100%);
+  box-shadow: 0 0 22px #ffe81f;
+}
+.interactive-demo-panel.has-wind .turbine-blades {
+  border-color: #ffe81f;
+  animation-duration: 1.6s;
+}
+.interactive-demo-panel.has-wind #valRpm,
+.interactive-demo-panel.has-wind #valVento {
+  color: #ffe81f;
+}
+.interactive-demo-panel.has-wind #pinRpm .pin-marker,
+.interactive-demo-panel.has-wind #pinVento .pin-marker {
+  background: #ffe81f;
+  box-shadow: 0 0 12px #ffe81f;
 }
 
 .demo-controls {

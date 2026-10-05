@@ -13,91 +13,138 @@
 </head>
 <body>
 
+  <!-- Topo com Status Geral e Telemetria Climática -->
   <header class="topo">
-    <span class="topo-tag"><span class="pulso"></span> SENSORES IoT CONECTADOS</span>
+    <div class="topo-linha">
+      <span class="topo-tag"><span class="pulso" id="pulsoGlobal"></span> REDE IoT ATIVA</span>
+      <span class="clima-badge" id="climaBadge">CLIMA: ESTÁVEL</span>
+    </div>
     <h1>TURBINA INTELIGENTE</h1>
   </header>
 
-  <model-viewer
-    id="turbina"
-    src="turbina.glb"
-    alt="Turbina eólica 3D com sensores IoT"
-    ar
-    ar-modes="webxr scene-viewer quick-look"
-    ar-scale="auto"
-    ar-placement="floor"
-    camera-controls
-    touch-action="pan-y"
-    auto-rotate
-    auto-rotate-delay="0"
-    rotation-per-second="18deg"
-    autoplay
-    animation-name="Girar"
-    camera-orbit="35deg 75deg auto"
-    min-camera-orbit="auto auto 0.5m"
-    shadow-intensity="1"
-    shadow-softness="0.8"
-    exposure="1.1"
-    environment-image="neutral"
-    interaction-prompt="none">
+  <!-- Container do Visualizador 3D com Canvas de Clima -->
+  <div class="viewer-container">
+    <canvas id="rainCanvas"></canvas>
 
-    <!-- Etiquetas de sensores (aparecem em 3D e dentro da RA) -->
-    <div class="sensor" slot="hotspot-temp" data-position="0 0.50 -0.01" data-normal="0 1 0">
-      <span class="sensor-ponto"></span>
-      <div class="sensor-info">
-        <span class="sensor-nome">TEMPERATURA</span>
-        <strong id="vTemp">--</strong>
+    <model-viewer
+      id="turbina"
+      src="turbina.glb"
+      alt="Turbina eólica 3D com sensores IoT"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      ar-scale="auto"
+      ar-placement="floor"
+      camera-controls
+      touch-action="pan-y"
+      auto-rotate
+      auto-rotate-delay="0"
+      rotation-per-second="18deg"
+      autoplay
+      animation-name="Girar"
+      camera-orbit="35deg 75deg auto"
+      min-camera-orbit="auto auto 0.5m"
+      shadow-intensity="1"
+      shadow-softness="0.8"
+      exposure="1.1"
+      environment-image="neutral"
+      interaction-prompt="none">
+
+      <!-- Hotspots dos Sensores IoT em 3D -->
+      <div class="sensor" slot="hotspot-vento" data-position="-0.035 0.50 -0.03" data-normal="-1 1 0">
+        <span class="sensor-ponto"></span>
+        <div class="sensor-info">
+          <span class="sensor-nome">ANEMÔMETRO // VENTO</span>
+          <strong id="vVento">--</strong>
+        </div>
       </div>
-    </div>
 
-    <div class="sensor" slot="hotspot-rpm" data-position="0 0.465 0.10" data-normal="0 0 1">
-      <span class="sensor-ponto"></span>
-      <div class="sensor-info">
-        <span class="sensor-nome">ROTAÇÃO</span>
-        <strong id="vRpm">--</strong>
+      <div class="sensor" slot="hotspot-temp" data-position="0 0.50 -0.01" data-normal="0 1 0">
+        <span class="sensor-ponto"></span>
+        <div class="sensor-info">
+          <span class="sensor-nome">TEMP NÚCLEO</span>
+          <strong id="vTemp">--</strong>
+        </div>
       </div>
-    </div>
 
-    <div class="sensor" slot="hotspot-vib" data-position="0.024 0.20 0" data-normal="1 0 0">
-      <span class="sensor-ponto"></span>
-      <div class="sensor-info">
-        <span class="sensor-nome">VIBRAÇÃO</span>
-        <strong id="vVib">--</strong>
+      <div class="sensor" slot="hotspot-rpm" data-position="0 0.465 0.10" data-normal="0 0 1">
+        <span class="sensor-ponto"></span>
+        <div class="sensor-info">
+          <span class="sensor-nome">ROTAÇÃO</span>
+          <strong id="vRpm">--</strong>
+        </div>
       </div>
-    </div>
 
-    <div class="sensor" slot="hotspot-energia" data-position="0.08 0.01 0" data-normal="1 0 0">
-      <span class="sensor-ponto"></span>
-      <div class="sensor-info">
-        <span class="sensor-nome">ENERGIA</span>
-        <strong id="vEnergia">--</strong>
+      <div class="sensor" slot="hotspot-vib" data-position="0.024 0.20 0" data-normal="1 0 0">
+        <span class="sensor-ponto"></span>
+        <div class="sensor-info">
+          <span class="sensor-nome">VIBRAÇÃO IoT</span>
+          <strong id="vVib">--</strong>
+        </div>
       </div>
-    </div>
 
-    <!-- Botão de RA (só aparece em celulares compatíveis) -->
-    <button slot="ar-button" class="btn-ra">
-      VER NA MINHA MESA
-    </button>
-
-    <!-- Barra de carregamento -->
-    <div slot="progress-bar" class="carregando" id="carregando">
-      <div class="carregando-barra" id="carregandoBarra"></div>
-    </div>
-
-    <!-- Painel de controle (também visível dentro da RA) -->
-    <div class="painel">
-      <div class="status" id="status">
-        <span class="status-luz"></span>
-        <span id="statusTexto">OPERAÇÃO NORMAL</span>
+      <div class="sensor" slot="hotspot-energia" data-position="0.08 0.01 0" data-normal="1 0 0">
+        <span class="sensor-ponto"></span>
+        <div class="sensor-info">
+          <span class="sensor-nome">GERAÇÃO</span>
+          <strong id="vEnergia">--</strong>
+        </div>
       </div>
-      <button class="btn-falha" id="btnFalha">SIMULAR FALHA</button>
-    </div>
-  </model-viewer>
 
-  <section class="instrucoes" id="instrucoes">
-    <p id="dicaRa">Toque em <strong>VER NA MINHA MESA</strong> e aponte a câmera para o chão ou para a mesa. Mova o celular devagar até a turbina aparecer.</p>
-    <p class="dica-sem-ra" id="dicaSemRa">Seu celular não tem suporte a RA, mas você pode girar a turbina com o dedo e testar os sensores.</p>
+      <!-- Botão de Realidade Aumentada -->
+      <button slot="ar-button" class="btn-ra">
+        VER NA MINHA MESA
+      </button>
+
+      <!-- Barra de Carregamento -->
+      <div slot="progress-bar" class="carregando" id="carregando">
+        <div class="carregando-barra" id="carregandoBarra"></div>
+      </div>
+
+      <!-- Banner de Diagnóstico Flutuante -->
+      <div class="status-banner" id="statusBanner">
+        <span class="status-icone" id="statusIcone"></span>
+        <div class="status-textos">
+          <span class="status-titulo" id="statusTitulo">OPERAÇÃO NORMAL</span>
+          <span class="status-desc" id="statusDesc">Telemetria dentro dos parâmetros nominais de eficiência.</span>
+        </div>
+      </div>
+    </model-viewer>
+  </div>
+
+  <!-- Painel de Cenários Interativos -->
+  <section class="cenarios-painel">
+    <div class="cenarios-header">
+      <span class="cenarios-sub">SELECIONE O CENÁRIO DE TESTE:</span>
+    </div>
+    <div class="cenarios-botoes" id="cenariosBotoes">
+      <button class="btn-cenario ativo" data-cenario="padrao">
+        <span class="cenario-indicador padrao"></span>
+        <span class="cenario-nome">PADRÃO</span>
+      </button>
+      <button class="btn-cenario" data-cenario="tempestade">
+        <span class="cenario-indicador tempestade"></span>
+        <span class="cenario-nome">CHUVA & VENTO</span>
+      </button>
+      <button class="btn-cenario" data-cenario="superaquecimento">
+        <span class="cenario-indicador superaquecimento"></span>
+        <span class="cenario-nome">SUPERAQUECIMENTO</span>
+      </button>
+      <button class="btn-cenario" data-cenario="calmaria">
+        <span class="cenario-indicador calmaria"></span>
+        <span class="cenario-nome">CALMARIA</span>
+      </button>
+      <button class="btn-cenario" data-cenario="freio">
+        <span class="cenario-indicador freio"></span>
+        <span class="cenario-nome">FREIO DE EMERGÊNCIA</span>
+      </button>
+    </div>
   </section>
+
+  <!-- Instruções de Uso -->
+  <footer class="instrucoes" id="instrucoes">
+    <p id="dicaRa">Toque em <strong>VER NA MINHA MESA</strong> para ver o holograma no chão ou na carteira. Use os botões acima para simular diferentes condições climáticas e técnicas.</p>
+    <p class="dica-sem-ra" id="dicaSemRa">Use o dedo para girar a turbina e toque nos cenários acima para simular os sensores em tempo real.</p>
+  </footer>
 
   <script src="ar.js"></script>
 </body>
