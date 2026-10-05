@@ -1,15 +1,16 @@
 /* ============================================================
-   TURBINA IoT EM REALIDADE AUMENTADA - MÚLTIPLOS CENÁRIOS
+   TURBINA IoT EM REALIDADE AUMENTADA - CONTROLES INTEGRADOS AR
    ============================================================ */
 
 const mv = document.getElementById('turbina');
 const climaBadge = document.getElementById('climaBadge');
-const statusBanner = document.getElementById('statusBanner');
 const statusTitulo = document.getElementById('statusTitulo');
 const statusDesc = document.getElementById('statusDesc');
 const statusIcone = document.getElementById('statusIcone');
-const pulsoGlobal = document.getElementById('pulsoGlobal');
 const botoesCenarios = document.querySelectorAll('.btn-cenario');
+const btnToggleHud = document.getElementById('btnToggleHud');
+const txtToggleHud = document.getElementById('txtToggleHud');
+const arControlesBar = document.getElementById('arControlesBar');
 
 const campos = {
   vento: document.getElementById('vVento'),
@@ -24,9 +25,9 @@ const campos = {
 // ------------------------------------------------------------
 const CENARIOS = {
   padrao: {
-    clima: 'CLIMA: ESTÁVEL',
-    titulo: 'OPERAÇÃO NORMAL // EFICIÊNCIA MÁXIMA',
-    desc: 'Brisa moderada contínua. Sistema IoT operando com parâmetros ótimos.',
+    clima: 'ESTÁVEL',
+    titulo: 'OPERAÇÃO NORMAL',
+    desc: 'Brisa moderada contínua. Parâmetros dentro dos limites ideais.',
     corHex: '#00f0ff',
     corGL: [0.0, 0.94, 1.0],
     speed: 1.0,
@@ -39,9 +40,9 @@ const CENARIOS = {
     vibrar: false
   },
   tempestade: {
-    clima: 'CLIMA: TEMPESTADE',
-    titulo: 'VENTO SEVERO // ALTA ROTAÇÃO',
-    desc: 'Anemômetro acusa rajadas fortes de vento e chuva. Sistema ajusta ângulo de pitch das pás.',
+    clima: 'TEMPESTADE',
+    titulo: 'VENTO SEVERO',
+    desc: 'Rajadas fortes de vento e chuva detectadas. Rotação em regime alto.',
     corHex: '#ffe81f',
     corGL: [1.0, 0.9, 0.15],
     speed: 1.85,
@@ -51,27 +52,27 @@ const CENARIOS = {
     vib: [0.85, 1.30],
     energia: [3.10, 3.45],
     chuva: true,
-    vibrar: [120]
+    vibrar: [100]
   },
   superaquecimento: {
-    clima: 'CLIMA: CRÍTICO',
-    titulo: 'ALERTA TÉRMICO // SUPERAQUECIMENTO NO EIXO',
-    desc: 'Sensores IoT acusam temperatura e vibração anormais. Risco iminente de dano mecânico.',
+    clima: 'CRÍTICO',
+    titulo: 'SUPERAQUECIMENTO',
+    desc: 'Temperatura e vibração anormais no eixo. Risco de dano mecânico.',
     corHex: '#ff3344',
     corGL: [1.0, 0.15, 0.22],
-    speed: 2.9,
+    speed: 2.8,
     vento: [40, 48],
     temp: [116, 128],
     rpm: [2750, 2980],
     vib: [2.30, 3.10],
     energia: [0.45, 0.80],
     chuva: false,
-    vibrar: [200, 100, 200]
+    vibrar: [180, 80, 180]
   },
   calmaria: {
-    clima: 'CLIMA: SEM VENTO',
-    titulo: 'STANDBY // BAIXA VELOCIDADE DO VENTO',
-    desc: 'Velocidade do ar abaixo do corte inicial. Rotor desacelerado em estado de espera.',
+    clima: 'SEM VENTO',
+    titulo: 'STANDBY',
+    desc: 'Velocidade do ar abaixo do corte. Rotor em espera de vento.',
     corHex: '#38bdf8',
     corGL: [0.22, 0.70, 0.98],
     speed: 0.12,
@@ -84,9 +85,9 @@ const CENARIOS = {
     vibrar: false
   },
   freio: {
-    clima: 'CLIMA: BLOQUEIO',
-    titulo: 'PROTEÇÃO IoT // FREIO HIDRÁULICO ATIVADO',
-    desc: 'Vento extremo detectado. IoT travou o rotor imediatamente para evitar quebra da estrutura.',
+    clima: 'BLOQUEIO',
+    titulo: 'FREIO ATIVADO',
+    desc: 'Freio hidráulico acionado preventivamente pelo sistema IoT.',
     corHex: '#c084fc',
     corGL: [0.85, 0.45, 1.0],
     speed: 0.0,
@@ -96,7 +97,7 @@ const CENARIOS = {
     vib: [0.02, 0.04],
     energia: [0.00, 0.00],
     chuva: false,
-    vibrar: [300]
+    vibrar: [250]
   }
 };
 
@@ -111,26 +112,26 @@ function atualizarSensores() {
   if (!c) return;
 
   if (c.rpm[0] === 0 && c.rpm[1] === 0) {
-    campos.rpm.textContent = '0 RPM [TRAVADO]';
-    campos.energia.textContent = '0.00 MW [DESCONECTADO]';
+    if (campos.rpm) campos.rpm.textContent = '0 RPM [TRAVADO]';
+    if (campos.energia) campos.energia.textContent = '0.00 MW';
   } else {
-    campos.rpm.textContent = `${Math.round(aleatorio(c.rpm)).toLocaleString('pt-BR')} RPM`;
-    campos.energia.textContent = `${aleatorio(c.energia).toFixed(2)} MW`;
+    if (campos.rpm) campos.rpm.textContent = `${Math.round(aleatorio(c.rpm)).toLocaleString('pt-BR')} RPM`;
+    if (campos.energia) campos.energia.textContent = `${aleatorio(c.energia).toFixed(2)} MW`;
   }
 
-  campos.vento.textContent = `${Math.round(aleatorio(c.vento))} km/h`;
-  campos.temp.textContent = `${aleatorio(c.temp).toFixed(1)} °C`;
-  campos.vib.textContent = `${aleatorio(c.vib).toFixed(2)} mm/s`;
+  if (campos.vento) campos.vento.textContent = `${Math.round(aleatorio(c.vento))} km/h`;
+  if (campos.temp) campos.temp.textContent = `${aleatorio(c.temp).toFixed(1)} °C`;
+  if (campos.vib) campos.vib.textContent = `${aleatorio(c.vib).toFixed(2)} mm/s`;
 }
 
 setInterval(atualizarSensores, 850);
 atualizarSensores();
 
 // ------------------------------------------------------------
-// Ajuste das Luzes e Rotação do Modelo 3D
+// Ajuste de Cor dos LEDs e Rotação do Modelo 3D
 // ------------------------------------------------------------
 function pintarModelo(cor) {
-  if (!mv.model) return;
+  if (!mv || !mv.model) return;
   const mat = mv.model.materials.find(m => m.name === 'Status');
   if (!mat) return;
   mat.pbrMetallicRoughness.setBaseColorFactor([...cor, 1]);
@@ -144,24 +145,19 @@ function aplicarCenario(chave) {
   cenarioAtualChave = chave;
   document.documentElement.style.setProperty('--cor-status', c.corHex);
 
-  // Atualiza textos
-  climaBadge.textContent = c.clima;
-  statusTitulo.textContent = c.titulo;
-  statusDesc.textContent = c.desc;
+  if (climaBadge) climaBadge.textContent = c.clima;
+  if (statusTitulo) statusTitulo.textContent = c.titulo;
+  if (statusDesc) statusDesc.textContent = c.desc;
 
-  // Atualiza botões
   botoesCenarios.forEach(btn => {
     btn.classList.toggle('ativo', btn.getAttribute('data-cenario') === chave);
   });
 
-  // Atualiza modelo 3D
   pintarModelo(c.corGL);
-  mv.timeScale = c.speed;
+  if (mv) mv.timeScale = c.speed;
 
-  // Atualiza chuva
   alternarChuva(c.chuva);
 
-  // Vibração no celular
   if (c.vibrar && navigator.vibrate) {
     navigator.vibrate(c.vibrar);
   }
@@ -169,24 +165,50 @@ function aplicarCenario(chave) {
   atualizarSensores();
 }
 
-// Ouvintes dos botões de cenários
+// Ouvintes dos botões de cenários (funcionam na web e dentro da câmera em AR)
 botoesCenarios.forEach(btn => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
     const chave = btn.getAttribute('data-cenario');
     aplicarCenario(chave);
   });
 });
 
+// Evita que toques nos botões de controle afetem a ancoragem da turbina em WebXR AR
+if (arControlesBar) {
+  ['touchstart', 'touchend', 'click', 'pointerdown'].forEach(evt => {
+    arControlesBar.addEventListener(evt, (e) => {
+      e.stopPropagation();
+    }, { passive: false });
+  });
+}
+
 // ------------------------------------------------------------
-// Sistema de Chuva Dinâmica em Canvas (Leve e Eficiente)
+// Controle do HUD (Ocultar / Exibir Sensores Flutuantes)
+// ------------------------------------------------------------
+let hudVisivel = true;
+if (btnToggleHud) {
+  btnToggleHud.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hudVisivel = !hudVisivel;
+    if (mv) mv.classList.toggle('hud-oculto', !hudVisivel);
+    if (txtToggleHud) {
+      txtToggleHud.textContent = hudVisivel ? 'LIGADO' : 'DESLIGADO';
+    }
+  });
+}
+
+// ------------------------------------------------------------
+// Sistema de Chuva Dinâmica em Canvas
 // ------------------------------------------------------------
 const rainCanvas = document.getElementById('rainCanvas');
-const rCtx = rainCanvas.getContext('2d');
+const rCtx = rainCanvas ? rainCanvas.getContext('2d') : null;
 let gotas = [];
 let chuvaAtiva = false;
 let animacaoId = null;
 
 function redimensionarCanvasChuva() {
+  if (!rainCanvas || !rainCanvas.parentElement) return;
   const retangulo = rainCanvas.parentElement.getBoundingClientRect();
   rainCanvas.width = retangulo.width;
   rainCanvas.height = retangulo.height;
@@ -194,6 +216,7 @@ function redimensionarCanvasChuva() {
 }
 
 function criarGotas() {
+  if (!rainCanvas) return;
   gotas = [];
   const qtd = Math.min(85, Math.floor(rainCanvas.width / 5));
   for (let i = 0; i < qtd; i++) {
@@ -208,7 +231,7 @@ function criarGotas() {
 }
 
 function animarChuva() {
-  if (!chuvaAtiva) return;
+  if (!chuvaAtiva || !rCtx) return;
   rCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
 
   rCtx.strokeStyle = 'rgba(180, 230, 255, 0.45)';
@@ -237,6 +260,7 @@ function animarChuva() {
 }
 
 function alternarChuva(ligar) {
+  if (!rainCanvas) return;
   chuvaAtiva = ligar;
   rainCanvas.classList.toggle('ativo', ligar);
 
@@ -249,7 +273,7 @@ function alternarChuva(ligar) {
       cancelAnimationFrame(animacaoId);
       animacaoId = null;
     }
-    rCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+    if (rCtx) rCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
   }
 }
 
@@ -259,32 +283,35 @@ setTimeout(redimensionarCanvasChuva, 300);
 // ------------------------------------------------------------
 // Eventos do Model Viewer
 // ------------------------------------------------------------
-mv.addEventListener('progress', (e) => {
-  const p = e.detail.totalProgress;
-  const barra = document.getElementById('carregandoBarra');
-  if (barra) barra.style.width = `${p * 100}%`;
-  if (p >= 1) {
-    const c = document.getElementById('carregando');
-    if (c) c.classList.add('oculto');
-  }
-});
-
-mv.addEventListener('load', () => {
-  aplicarCenario(cenarioAtualChave);
-  setTimeout(() => {
-    if (!mv.canActivateAR) {
-      document.body.classList.add('sem-ra');
+if (mv) {
+  mv.addEventListener('progress', (e) => {
+    const p = e.detail.totalProgress;
+    const barra = document.getElementById('carregandoBarra');
+    if (barra) barra.style.width = `${p * 100}%`;
+    if (p >= 1) {
+      const c = document.getElementById('carregando');
+      if (c) c.classList.add('oculto');
     }
-  }, 600);
-});
+  });
 
-// Para de girar automaticamente ao entrar em sessão de RA
-mv.addEventListener('ar-status', (e) => {
-  mv.autoRotate = e.detail.status !== 'session-started';
-  // Reduz chuva dentro da câmera para priorizar visão do mundo real
-  if (e.detail.status === 'session-started') {
-    rainCanvas.style.display = 'none';
-  } else {
-    rainCanvas.style.display = 'block';
-  }
-});
+  mv.addEventListener('load', () => {
+    aplicarCenario(cenarioAtualChave);
+    setTimeout(() => {
+      if (!mv.canActivateAR) {
+        document.body.classList.add('sem-ra');
+      }
+    }, 600);
+  });
+
+  // Para de girar automaticamente ao entrar em sessão de RA
+  mv.addEventListener('ar-status', (e) => {
+    mv.autoRotate = e.detail.status !== 'session-started';
+    if (rainCanvas) {
+      if (e.detail.status === 'session-started') {
+        rainCanvas.style.display = 'none';
+      } else {
+        rainCanvas.style.display = 'block';
+      }
+    }
+  });
+}

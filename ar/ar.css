@@ -6,7 +6,7 @@
   --azul-gelo: #38bdf8;
   --roxo: #c084fc;
   --fundo: #030712;
-  --painel: rgba(8, 16, 32, 0.88);
+  --painel: rgba(6, 14, 28, 0.78);
   --texto: #e2e8f0;
   --texto-suave: #94a3b8;
   --cor-status: var(--ciano);
@@ -23,8 +23,8 @@ html, body {
   height: 100%;
   background-color: var(--fundo);
   background-image:
-    radial-gradient(ellipse at 50% 0%, rgba(0, 240, 255, 0.12) 0%, transparent 60%),
-    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.04) 0 1px, transparent 2px);
+    radial-gradient(ellipse at 50% 0%, rgba(0, 240, 255, 0.1) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.03) 0 1px, transparent 2px);
   background-size: 100% 100%, 40px 40px;
   color: var(--texto);
   font-family: 'Inter', sans-serif;
@@ -37,67 +37,27 @@ body {
   min-height: 100dvh;
 }
 
-/* ---------- Topo ---------- */
+/* ---------- Topo Compacto ---------- */
 .topo {
-  padding: 14px 18px 4px;
+  padding: 12px 16px 6px;
   text-align: center;
   flex-shrink: 0;
-}
-
-.topo-linha {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 440px;
-  margin: 0 auto 4px;
-}
-
-.topo-tag {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.6rem;
-  letter-spacing: 2px;
-  color: var(--ciano);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.clima-badge {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  background: rgba(0, 240, 255, 0.1);
-  border: 1px solid var(--cor-status);
-  padding: 2px 10px;
-  border-radius: 12px;
-  color: var(--cor-status);
-  transition: all 0.3s ease;
 }
 
 .topo h1 {
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   letter-spacing: 2px;
   color: var(--amarelo);
-  text-shadow: 0 0 20px rgba(255, 232, 31, 0.5);
-  margin-top: 2px;
+  text-shadow: 0 0 18px rgba(255, 232, 31, 0.45);
 }
 
-.pulso {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--cor-status);
-  box-shadow: 0 0 8px var(--cor-status);
-  animation: pulsoAnim 1.4s infinite;
-  transition: background 0.3s, box-shadow 0.3s;
-}
-
-@keyframes pulsoAnim {
-  0%, 100% { opacity: 0.5; transform: scale(0.85); }
-  50% { opacity: 1; transform: scale(1.2); }
+.topo-sub {
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+  margin-top: 3px;
+  letter-spacing: 0.5px;
 }
 
 /* ---------- Container 3D & Chuva ---------- */
@@ -105,7 +65,7 @@ body {
   position: relative;
   flex: 1;
   width: 100%;
-  min-height: 52dvh;
+  min-height: 60dvh;
   display: flex;
   overflow: hidden;
 }
@@ -131,54 +91,59 @@ model-viewer {
   height: 100%;
   --poster-color: transparent;
   --progress-bar-color: transparent;
+  position: relative;
 }
 
-/* ---------- Etiquetas dos sensores ---------- */
+/* ---------- Etiquetas dos Sensores (Discretas & Translúcidas) ---------- */
 .sensor {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   border: none;
   background: none;
   pointer-events: none;
-  transform: translate(-6px, 0);
+  transform: translate(-4px, 0);
   z-index: 8;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .sensor-ponto {
-  width: 11px;
-  height: 11px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--cor-status);
-  box-shadow: 0 0 10px var(--cor-status);
-  border: 2px solid #fff;
+  box-shadow: 0 0 8px var(--cor-status);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
   flex-shrink: 0;
   transition: background 0.3s, box-shadow 0.3s;
 }
 
 .sensor-info {
-  background: rgba(5, 12, 24, 0.92);
-  border: 1px solid var(--cor-status);
-  border-radius: 6px;
-  padding: 3px 8px;
-  display: flex;
-  flex-direction: column;
+  background: rgba(4, 10, 22, 0.65);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 14px;
+  padding: 2px 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   white-space: nowrap;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
-  transition: border-color 0.3s;
-  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  transition: border-color 0.3s, background-color 0.3s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
-.sensor-nome {
+.sensor-tag {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.48rem;
-  letter-spacing: 1px;
+  font-size: 0.5rem;
+  letter-spacing: 0.8px;
   color: var(--texto-suave);
+  text-transform: uppercase;
 }
 
 .sensor-info strong {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 0.92rem;
+  font-size: 0.84rem;
   font-weight: 700;
   color: var(--cor-status);
   transition: color 0.3s;
@@ -188,30 +153,38 @@ model-viewer {
   opacity: 0.2;
 }
 
-/* ---------- Botão de RA ---------- */
+/* Ocultação do HUD a pedido do usuário */
+model-viewer.hud-oculto .sensor {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.85);
+}
+
+/* ---------- Botão de Realidade Aumentada ---------- */
 .btn-ra {
   position: absolute;
-  top: 12px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--amarelo);
   color: #050b14;
   border: none;
   border-radius: 30px;
-  padding: 12px 26px;
+  padding: 11px 24px;
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   letter-spacing: 1.5px;
-  box-shadow: 0 0 20px rgba(255, 232, 31, 0.55);
+  box-shadow: 0 0 20px rgba(255, 232, 31, 0.5);
   white-space: nowrap;
-  z-index: 10;
-  animation: chamar 2s infinite;
+  z-index: 20;
+  cursor: pointer;
+  animation: chamar 2.2s infinite;
 }
 
 @keyframes chamar {
-  0%, 100% { box-shadow: 0 0 14px rgba(255, 232, 31, 0.4); }
-  50% { box-shadow: 0 0 30px rgba(255, 232, 31, 0.85); }
+  0%, 100% { box-shadow: 0 0 12px rgba(255, 232, 31, 0.35); transform: translateX(-50%) scale(1); }
+  50% { box-shadow: 0 0 28px rgba(255, 232, 31, 0.8); transform: translateX(-50%) scale(1.03); }
 }
 
 /* ---------- Barra de Carregamento ---------- */
@@ -224,6 +197,7 @@ model-viewer {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   overflow: hidden;
+  z-index: 15;
 }
 
 .carregando.oculto {
@@ -237,84 +211,117 @@ model-viewer {
   transition: width 0.2s;
 }
 
-/* ---------- Banner de Diagnóstico ---------- */
-.status-banner {
+/* ---------- Barra de Controles AR e Diagnóstico (Visível na Câmera em AR) ---------- */
+.ar-controles-bar {
   position: absolute;
-  left: 12px;
-  right: 12px;
   bottom: 12px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  z-index: 30;
+  pointer-events: auto;
+}
+
+/* Previne que toques na barra afetem a ancoragem da turbina em AR */
+.ar-controles-bar * {
+  pointer-events: auto;
+}
+
+/* Mini Barra de Status */
+.status-pill {
   background: var(--painel);
   border: 1px solid var(--cor-status);
-  border-radius: 12px;
-  padding: 10px 14px;
+  border-radius: 18px;
+  padding: 5px 12px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-  z-index: 10;
+  justify-content: space-between;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   transition: border-color 0.3s;
 }
 
+.status-pill-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .status-icone {
-  width: 12px;
-  height: 12px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--cor-status);
-  box-shadow: 0 0 10px var(--cor-status);
+  box-shadow: 0 0 8px var(--cor-status);
   flex-shrink: 0;
+  animation: pulsoAnim 1.4s infinite;
   transition: background 0.3s, box-shadow 0.3s;
 }
 
-.status-textos {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  overflow: hidden;
+@keyframes pulsoAnim {
+  0%, 100% { opacity: 0.5; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
 .status-titulo {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   color: var(--cor-status);
   transition: color 0.3s;
 }
 
-.status-desc {
-  font-size: 0.76rem;
-  color: var(--texto-suave);
-  line-height: 1.35;
-  white-space: normal;
+.status-sep {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.7rem;
 }
 
-/* ---------- Painel de Cenários ---------- */
-.cenarios-painel {
-  padding: 8px 12px 6px;
-  background: rgba(6, 12, 24, 0.95);
-  border-top: 1px solid rgba(0, 240, 255, 0.18);
+.status-clima {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--texto-suave);
+  letter-spacing: 0.5px;
+}
+
+.btn-hud-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2px 8px;
+  color: var(--texto);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
-.cenarios-header {
-  margin-bottom: 6px;
-  padding: 0 4px;
+.btn-hud-toggle:active {
+  transform: scale(0.95);
+  background: rgba(0, 240, 255, 0.25);
 }
 
-.cenarios-sub {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.58rem;
-  letter-spacing: 1.5px;
+.btn-hud-toggle span {
   color: var(--ciano);
-  opacity: 0.85;
 }
 
+/* Botões de Cenários em Pills Roláveis */
 .cenarios-botoes {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   overflow-x: auto;
-  padding-bottom: 6px;
+  padding: 2px 2px 4px;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -325,25 +332,27 @@ model-viewer {
 
 .btn-cenario {
   flex-shrink: 0;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  padding: 9px 14px;
+  background: rgba(8, 16, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 7px 13px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: var(--texto);
   cursor: pointer;
   transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .btn-cenario:active {
-  transform: scale(0.96);
+  transform: scale(0.95);
 }
 
 .cenario-indicador {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -356,49 +365,49 @@ model-viewer {
 
 .cenario-nome {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
   white-space: nowrap;
 }
 
-/* Estados Ativos dos Botões */
+/* Estados Ativos dos Botões de Cenário */
 .btn-cenario.ativo {
   border-color: var(--cor-status);
-  background: rgba(0, 240, 255, 0.12);
-  box-shadow: 0 0 14px rgba(0, 240, 255, 0.2);
+  background: rgba(0, 240, 255, 0.16);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
 }
 
 .btn-cenario[data-cenario="tempestade"].ativo {
   border-color: var(--amarelo);
-  background: rgba(255, 232, 31, 0.12);
-  box-shadow: 0 0 14px rgba(255, 232, 31, 0.2);
+  background: rgba(255, 232, 31, 0.16);
+  box-shadow: 0 0 12px rgba(255, 232, 31, 0.25);
 }
 
 .btn-cenario[data-cenario="superaquecimento"].ativo {
   border-color: var(--vermelho);
-  background: rgba(255, 51, 68, 0.15);
-  box-shadow: 0 0 14px rgba(255, 51, 68, 0.25);
+  background: rgba(255, 51, 68, 0.2);
+  box-shadow: 0 0 12px rgba(255, 51, 68, 0.3);
 }
 
 .btn-cenario[data-cenario="calmaria"].ativo {
   border-color: var(--azul-gelo);
-  background: rgba(56, 189, 248, 0.12);
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
+  background: rgba(56, 189, 248, 0.16);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
 }
 
 .btn-cenario[data-cenario="freio"].ativo {
   border-color: var(--roxo);
-  background: rgba(192, 132, 252, 0.15);
-  box-shadow: 0 0 14px rgba(192, 132, 252, 0.25);
+  background: rgba(192, 132, 252, 0.2);
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.3);
 }
 
 /* ---------- Instruções no Rodapé ---------- */
 .instrucoes {
-  padding: 10px 18px 18px;
+  padding: 8px 16px 14px;
   text-align: center;
-  font-size: 0.82rem;
-  line-height: 1.45;
+  font-size: 0.78rem;
+  line-height: 1.4;
   color: var(--texto-suave);
   flex-shrink: 0;
 }

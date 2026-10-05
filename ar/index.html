@@ -13,13 +13,10 @@
 </head>
 <body>
 
-  <!-- Topo com Status Geral e Telemetria Climática -->
+  <!-- Topo Compacto e Limpo -->
   <header class="topo">
-    <div class="topo-linha">
-      <span class="topo-tag"><span class="pulso" id="pulsoGlobal"></span> REDE IoT ATIVA</span>
-      <span class="clima-badge" id="climaBadge">CLIMA: ESTÁVEL</span>
-    </div>
     <h1>TURBINA INTELIGENTE</h1>
+    <p class="topo-sub">Simulação de Telemetria e Sensores IoT em Realidade Aumentada</p>
   </header>
 
   <!-- Container do Visualizador 3D com Canvas de Clima -->
@@ -49,43 +46,43 @@
       environment-image="neutral"
       interaction-prompt="none">
 
-      <!-- Hotspots dos Sensores IoT em 3D -->
-      <div class="sensor" slot="hotspot-vento" data-position="-0.035 0.50 -0.03" data-normal="-1 1 0">
+      <!-- Hotspots dos Sensores IoT em 3D (Discretos e Não Obstrutivos) -->
+      <div class="sensor" slot="hotspot-vento" data-position="-0.07 0.50 -0.06" data-normal="-1 1 -1">
         <span class="sensor-ponto"></span>
         <div class="sensor-info">
-          <span class="sensor-nome">ANEMÔMETRO // VENTO</span>
+          <span class="sensor-tag">VENTO</span>
           <strong id="vVento">--</strong>
         </div>
       </div>
 
-      <div class="sensor" slot="hotspot-temp" data-position="0 0.50 -0.01" data-normal="0 1 0">
+      <div class="sensor" slot="hotspot-temp" data-position="0.07 0.485 -0.02" data-normal="1 1 0">
         <span class="sensor-ponto"></span>
         <div class="sensor-info">
-          <span class="sensor-nome">TEMP NÚCLEO</span>
+          <span class="sensor-tag">TEMP</span>
           <strong id="vTemp">--</strong>
         </div>
       </div>
 
-      <div class="sensor" slot="hotspot-rpm" data-position="0 0.465 0.10" data-normal="0 0 1">
+      <div class="sensor" slot="hotspot-rpm" data-position="-0.06 0.44 0.08" data-normal="-1 0 1">
         <span class="sensor-ponto"></span>
         <div class="sensor-info">
-          <span class="sensor-nome">ROTAÇÃO</span>
+          <span class="sensor-tag">RPM</span>
           <strong id="vRpm">--</strong>
         </div>
       </div>
 
-      <div class="sensor" slot="hotspot-vib" data-position="0.024 0.20 0" data-normal="1 0 0">
+      <div class="sensor" slot="hotspot-vib" data-position="0.038 0.20 0.02" data-normal="1 0 1">
         <span class="sensor-ponto"></span>
         <div class="sensor-info">
-          <span class="sensor-nome">VIBRAÇÃO IoT</span>
+          <span class="sensor-tag">VIBRAÇÃO</span>
           <strong id="vVib">--</strong>
         </div>
       </div>
 
-      <div class="sensor" slot="hotspot-energia" data-position="0.08 0.01 0" data-normal="1 0 0">
+      <div class="sensor" slot="hotspot-energia" data-position="0.07 0.03 0.04" data-normal="1 0 1">
         <span class="sensor-ponto"></span>
         <div class="sensor-info">
-          <span class="sensor-nome">GERAÇÃO</span>
+          <span class="sensor-tag">ENERGIA</span>
           <strong id="vEnergia">--</strong>
         </div>
       </div>
@@ -100,50 +97,52 @@
         <div class="carregando-barra" id="carregandoBarra"></div>
       </div>
 
-      <!-- Banner de Diagnóstico Flutuante -->
-      <div class="status-banner" id="statusBanner">
-        <span class="status-icone" id="statusIcone"></span>
-        <div class="status-textos">
-          <span class="status-titulo" id="statusTitulo">OPERAÇÃO NORMAL</span>
-          <span class="status-desc" id="statusDesc">Telemetria dentro dos parâmetros nominais de eficiência.</span>
+      <!-- Barra de Controles AR e Diagnóstico (Visível na Câmera em AR) -->
+      <div class="ar-controles-bar" id="arControlesBar">
+        <div class="status-pill" id="statusPill">
+          <div class="status-pill-info">
+            <span class="status-icone" id="statusIcone"></span>
+            <span class="status-titulo" id="statusTitulo">OPERAÇÃO NORMAL</span>
+            <span class="status-sep">•</span>
+            <span class="status-clima" id="climaBadge">ESTÁVEL</span>
+          </div>
+          <button type="button" class="btn-hud-toggle" id="btnToggleHud" title="Ocultar ou Exibir Sensores">
+            HUD: <span id="txtToggleHud">LIGADO</span>
+          </button>
+        </div>
+
+        <div class="cenarios-botoes" id="cenariosBotoes">
+          <button type="button" class="btn-cenario ativo" data-cenario="padrao">
+            <span class="cenario-indicador padrao"></span>
+            <span class="cenario-nome">PADRÃO</span>
+          </button>
+          <button type="button" class="btn-cenario" data-cenario="tempestade">
+            <span class="cenario-indicador tempestade"></span>
+            <span class="cenario-nome">CHUVA & VENTO</span>
+          </button>
+          <button type="button" class="btn-cenario" data-cenario="superaquecimento">
+            <span class="cenario-indicador superaquecimento"></span>
+            <span class="cenario-nome">SUPERAQUECIMENTO</span>
+          </button>
+          <button type="button" class="btn-cenario" data-cenario="calmaria">
+            <span class="cenario-indicador calmaria"></span>
+            <span class="cenario-nome">CALMARIA</span>
+          </button>
+          <button type="button" class="btn-cenario" data-cenario="freio">
+            <span class="cenario-indicador freio"></span>
+            <span class="cenario-nome">FREIO</span>
+          </button>
         </div>
       </div>
+
+      <span id="statusDesc" style="display:none"></span>
     </model-viewer>
   </div>
 
-  <!-- Painel de Cenários Interativos -->
-  <section class="cenarios-painel">
-    <div class="cenarios-header">
-      <span class="cenarios-sub">SELECIONE O CENÁRIO DE TESTE:</span>
-    </div>
-    <div class="cenarios-botoes" id="cenariosBotoes">
-      <button class="btn-cenario ativo" data-cenario="padrao">
-        <span class="cenario-indicador padrao"></span>
-        <span class="cenario-nome">PADRÃO</span>
-      </button>
-      <button class="btn-cenario" data-cenario="tempestade">
-        <span class="cenario-indicador tempestade"></span>
-        <span class="cenario-nome">CHUVA & VENTO</span>
-      </button>
-      <button class="btn-cenario" data-cenario="superaquecimento">
-        <span class="cenario-indicador superaquecimento"></span>
-        <span class="cenario-nome">SUPERAQUECIMENTO</span>
-      </button>
-      <button class="btn-cenario" data-cenario="calmaria">
-        <span class="cenario-indicador calmaria"></span>
-        <span class="cenario-nome">CALMARIA</span>
-      </button>
-      <button class="btn-cenario" data-cenario="freio">
-        <span class="cenario-indicador freio"></span>
-        <span class="cenario-nome">FREIO DE EMERGÊNCIA</span>
-      </button>
-    </div>
-  </section>
-
-  <!-- Instruções de Uso -->
+  <!-- Instruções de Uso no Rodapé -->
   <footer class="instrucoes" id="instrucoes">
-    <p id="dicaRa">Toque em <strong>VER NA MINHA MESA</strong> para ver o holograma no chão ou na carteira. Use os botões acima para simular diferentes condições climáticas e técnicas.</p>
-    <p class="dica-sem-ra" id="dicaSemRa">Use o dedo para girar a turbina e toque nos cenários acima para simular os sensores em tempo real.</p>
+    <p id="dicaRa">Toque em <strong>VER NA MINHA MESA</strong> para projetar na câmera. Você pode trocar os cenários direto pela câmera.</p>
+    <p class="dica-sem-ra" id="dicaSemRa">Gire com o dedo e toque nos botões para simular os sensores em tempo real.</p>
   </footer>
 
   <script src="ar.js"></script>
