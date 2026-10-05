@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realidade Aumentada com IoT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Canvas das Estrelas / Hiperespaço -->
+  <canvas id="starfield"></canvas>
+
+  <!-- Scanlines / Efeito Holográfico Sutil -->
+  <div class="hologram-overlay"></div>
+
+  <!-- Barra de Progresso Discreta (estilo apresentação real) -->
+  <div class="presentation-progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Contador Discreto de Slides no Canto -->
+  <div class="slide-counter-badge" id="slideCounterBadge">
+    <span id="currentSlideNum">1</span> / <span id="totalSlidesNum">10</span>
+  </div>
+
+  <!-- Botões de Navegação Flutuantes e Discretos (aparecem ao passar o mouse) -->
+  <button id="btnPrev" class="floating-nav-btn prev" title="Slide Anterior (Seta Esquerda / Espaço)">
+    <svg viewBox="0 0 24 24" width="26" height="26"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+  </button>
+  <button id="btnNext" class="floating-nav-btn next" title="Próximo Slide (Seta Direita)">
+    <svg viewBox="0 0 24 24" width="26" height="26"><path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+  </button>
+
+  <!-- Container Principal dos Slides (Apresentação Real) -->
+  <main class="presentation-stage">
+
+    <!-- ==================== SLIDE 0: CAPA ==================== -->
+    <section class="slide active" data-index="0">
+      <div class="slide-content intro-slide">
+        <div class="title-container">
+          <h1 class="main-title">REALIDADE AUMENTADA COM IOT</h1>
+          <div class="title-saber-bar"></div>
+        </div>
+
+        <!-- Créditos dos Integrantes (Canto Inferior Direito) -->
+        <div class="team-credits-box">
+          <span class="credits-heading">INTEGRANTES:</span>
+          <div class="team-names-pill">
+            <span class="team-member">Endrick</span>
+            <span class="dot-sep">•</span>
+            <span class="team-member">Gabriel</span>
+            <span class="dot-sep">•</span>
+            <span class="team-member">Schimidt</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 1: O QUE É RA? ==================== -->
+    <section class="slide" data-index="1">
+      <div class="slide-content">
+        <h2 class="slide-heading">O QUE É REALIDADE AUMENTADA (RA)?</h2>
+        <p class="slide-subtitle">A inserção de elementos virtuais diretamente no campo de visão do mundo real.</p>
+
+        <div class="cards-layout three-col">
+          <div class="holo-card">
+            <h3>O Mundo Real Não Some</h3>
+            <p>Diferente da Realidade Virtual (RV) que cria um ambiente 100% isolado, a <strong>RA mantém você na realidade</strong>, adicionando gráficos e dados por cima dela.</p>
+            <div class="card-tag">OVERLAY DIGITAL</div>
+          </div>
+
+          <div class="holo-card highlight-card">
+            <h3>Informação em Tempo Real</h3>
+            <p>Projeção de instruções visuais, mapas, textos e alertas gráficos <strong>ancorados no espaço 3D</strong> à sua frente, sem desviar sua atenção da tarefa.</p>
+            <div class="card-tag">CONTEXTO ESPACIAL</div>
+          </div>
+
+          <div class="holo-card">
+            <h3>Onde Você Já Viu?</h3>
+            <p>Filtros de câmera no celular, jogos populares como <em>Pokémon GO</em> e visores <strong>HUD (Heads-Up Display)</strong> em carros modernos e caças de aviação.</p>
+            <div class="card-tag">EXEMPLOS DO COTIDIANO</div>
+          </div>
+        </div>
+
+        <div class="quote-callout">
+          <span class="quote-glyph">“</span>
+          <p><strong>Em resumo simples:</strong> RA é enxergar o mundo real com informações digitais projetadas exatamente sobre o objeto com o qual você está interagindo.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 2: O QUE É IOT? ==================== -->
+    <section class="slide" data-index="2">
+      <div class="slide-content">
+        <h2 class="slide-heading">O QUE É INTERNET DAS COISAS (IoT)?</h2>
+        <p class="slide-subtitle">Objetos do cotidiano e máquinas industriais conectados à internet gerando dados vivos.</p>
+
+        <div class="cards-layout three-col">
+          <div class="holo-card">
+            <h3>Sensores em Tudo</h3>
+            <p>Termômetros, acelerômetros, medidores de pressão e fluxo instalados em máquinas, veículos e aparelhos do dia a dia.</p>
+            <div class="card-tag">COLETA DE TELEMETRIA</div>
+          </div>
+
+          <div class="holo-card">
+            <h3>Comunicação em Rede</h3>
+            <p>Os dispositivos enviam e recebem dados 24h por dia via Wi-Fi, 5G, Bluetooth ou radiofrequência industrial contínua.</p>
+            <div class="card-tag">CONECTIVIDADE TOTAL</div>
+          </div>
+
+          <div class="holo-card">
+            <h3>Ação Automatizada</h3>
+            <p>O dado não fica parado: ele avisa quando uma peça vai quebrar, desliga um motor com superaquecimento ou acende luzes sozinho.</p>
+            <div class="card-tag">INTELIGÊNCIA OPERACIONAL</div>
+          </div>
+        </div>
+
+        <div class="data-stream-box">
+          <div class="stream-header">
+            <span class="status-pulse"></span>
+            <span>EXEMPLOS DO DIA A DIA:</span>
+          </div>
+          <div class="stream-items">
+            <span class="chip">Smartwatches medindo batimentos</span>
+            <span class="chip">Lâmpadas e fechaduras inteligentes</span>
+            <span class="chip">Tratores autônomos na agricultura</span>
+            <span class="chip">Turbinas de usinas elétricas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 3: A FUSÃO RA + IOT ==================== -->
+    <section class="slide" data-index="3">
+      <div class="slide-content">
+        <h2 class="slide-heading">A FUSÃO: QUANDO RA ENCONTRA A IOT</h2>
+        <p class="slide-subtitle">O invisível se torna visível: o dado do sensor sai da tela do computador e vai para o objeto real.</p>
+
+        <div class="split-view">
+          <div class="split-left">
+            <div class="comparison-block old-way">
+              <span class="block-label">SEM REALIDADE AUMENTADA</span>
+              <h4>O Problema Tradicional:</h4>
+              <p>O técnico olha para uma máquina quebrada, precisa andar até um computador ou pegar uma prancheta cheia de tabelas e gráficos distantes da peça física.</p>
+            </div>
+
+            <div class="comparison-block new-way">
+              <span class="block-label">COM RA + IOT INTEGRADOS</span>
+              <h4>A Solução Holística:</h4>
+              <p>O técnico simplesmente <strong>olha para a máquina</strong>: os dados de temperatura, rotação e alertas aparecem flutuando exatamente onde estão os sensores.</p>
+            </div>
+
+            <ul class="key-points-list">
+              <li><strong>Zero perda de tempo:</strong> O operador não precisa procurar manuais em outra sala.</li>
+              <li><strong>Diagnóstico Instantâneo:</strong> Cor vermelha se a peça estiver quente, verde se estiver normal.</li>
+            </ul>
+          </div>
+
+          <!-- DEMO INTERATIVA HOLOGRÁFICA NO SLIDE -->
+          <div class="split-right">
+            <div class="interactive-demo-panel">
+              <div class="demo-hud-title">
+                <span class="blinking-dot"></span>
+                <span>SIMULADOR HUD: TURBINA CONECTADA</span>
+              </div>
+              <div class="hologram-viewport" id="holoViewport">
+                <div class="turbine-graphic">
+                  <div class="turbine-core"></div>
+                  <div class="turbine-blades"></div>
+                  <!-- Pontos de ancoragem de RA -->
+                  <div class="ar-pin pin-1" id="pinTemp">
+                    <div class="pin-marker"></div>
+                    <div class="pin-popup">
+                      <span class="label">TEMP NÚCLEO</span>
+                      <strong id="valTemp">74°C [NORMAL]</strong>
+                    </div>
+                  </div>
+                  <div class="ar-pin pin-2" id="pinRpm">
+                    <div class="pin-marker"></div>
+                    <div class="pin-popup">
+                      <span class="label">VELOCIDADE</span>
+                      <strong id="valRpm">3.420 RPM</strong>
+                    </div>
+                  </div>
+                  <div class="ar-pin pin-3" id="pinVib">
+                    <div class="pin-marker"></div>
+                    <div class="pin-popup">
+                      <span class="label">VIBRAÇÃO IoT</span>
+                      <strong id="valVib">0.08 mm/s [OK]</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="demo-controls">
+                <button class="sim-btn" onclick="simulateAnomaly()">Simular Falha no Sensor</button>
+                <button class="sim-btn reset" onclick="resetAnomaly()">Normalizar Sistema</button>
+              </div>
+              <p class="demo-hint">*Demonstração interativa da resposta da RA aos dados de IoT.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 4: ONDE JÁ É UTILIZADO? ==================== -->
+    <section class="slide" data-index="4">
+      <div class="slide-content">
+        <h2 class="slide-heading">ONDE ESSA COMBINAÇÃO JÁ É USADA NO MUNDO?</h2>
+        <p class="slide-subtitle">Não é ficção científica: setores de ponta já operam diariamente com RA + sensores IoT.</p>
+
+        <div class="cards-layout four-col">
+          <div class="holo-card">
+            <h3>Indústria 4.0</h3>
+            <p>Manutenção preditiva em fábricas. O operador vê o histórico de revisões flutuando sobre motores sem abrir tampas.</p>
+            <div class="card-tag">MANUFATURA</div>
+          </div>
+
+          <div class="holo-card">
+            <h3>Medicina & Cirurgias</h3>
+            <p>Médicos com óculos de RA enxergam sinais vitais do paciente (IoT) e exames 3D projetados diretamente sobre o corpo operado.</p>
+            <div class="card-tag">SAÚDE DE PRECISÃO</div>
+          </div>
+
+          <div class="holo-card">
+            <h3>Logística & Armazéns</h3>
+            <p><em>Pick-by-Vision</em>: O funcionário de galpões gigantes recebe setas luminosas no campo de visão até a caixa certa conectada por RFID.</p>
+            <div class="card-tag">SUPPLY CHAIN</div>
+          </div>
+
+          <div class="holo-card">
+            <h3>Redes de Energia & Óleo</h3>
+            <p>Inspeção de tubulações e subestações de alta tensão à distância segura, lendo sensores de voltagem sem encostar nos cabos.</p>
+            <div class="card-tag">SEGURANÇA PESADA</div>
+          </div>
+        </div>
+
+        <div class="stat-banner">
+          <div class="stat-item">
+            <span class="stat-num">-90%</span>
+            <span class="stat-desc">Erros de montagem e leitura</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">+40%</span>
+            <span class="stat-desc">Velocidade no diagnóstico técnico</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">Mãos Livres</span>
+            <span class="stat-desc">Operador focado 100% na tarefa física</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 5: CASOS REAIS DE SUCESSO ==================== -->
+    <section class="slide" data-index="5">
+      <div class="slide-content">
+        <h2 class="slide-heading">CASOS REAIS DE GRANDES EMPRESAS</h2>
+        <p class="slide-subtitle">Exemplos comprovados de gigantes globais que economizam bilhões com a tecnologia.</p>
+
+        <div class="cards-layout three-col">
+          <div class="case-card">
+            <div class="case-header">
+              <span class="corp-name">BOEING & AIRBUS</span>
+              <span class="corp-tag">AVIAÇÃO</span>
+            </div>
+            <h4>Instalação de Fiação de Aeronaves</h4>
+            <p>A montagem de milhares de cabos elétricos era guiada por manuais de papel de 1000 páginas. Com óculos de RA conectados a torquímetros inteligentes IoT:</p>
+            <div class="case-metric">Tempo reduzido em <strong>25%</strong> e taxa de erro caiu para <strong>quase zero</strong>.</div>
+          </div>
+
+          <div class="case-card highlight-card">
+            <div class="case-header">
+              <span class="corp-name">GENERAL ELECTRIC (GE)</span>
+              <span class="corp-tag">ENERGIA & TURBINAS</span>
+            </div>
+            <h4>Inspeção de Turbinas Eólicas e a Gás</h4>
+            <p>Técnicos sobem torres de 100 metros usando óculos de RA que exibem vibração e torque em tempo real enviados pelos sensores da turbina.</p>
+            <div class="case-metric">Produtividade dos técnicos aumentou em <strong>34%</strong> logo no primeiro uso.</div>
+          </div>
+
+          <div class="case-card">
+            <div class="case-header">
+              <span class="corp-name">PORSCHE & VOLVO</span>
+              <span class="corp-tag">AUTOMOBILÍSTICA</span>
+            </div>
+            <h4>Assistência Remota em Concessionárias</h4>
+            <p>Mecânicos conectam o carro à central IoT e colocam óculos RA. Engenheiros na matriz enxergam o que ele vê e desenham flechas virtuais no motor dele.</p>
+            <div class="case-metric">Resolução de panes complexas <strong>40% mais rápida</strong>.</div>
+          </div>
+        </div>
+
+        <div class="concept-chip-container">
+          <span class="concept-label">TERMO CHAVE:</span>
+          <span class="concept-pill"><strong>Gêmeo Digital (Digital Twin):</strong> O modelo 3D virtual exato da máquina que reage em tempo real com os sensores físicos.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 6: ÓCULOS DE RA NO MERCADO ==================== -->
+    <section class="slide" data-index="6">
+      <div class="slide-content">
+        <h2 class="slide-heading">O ARSENAL DE HARDWARE: ÓCULOS DE RA ATUAIS</h2>
+        <p class="slide-subtitle">Quais dispositivos tornam essa visualização possível hoje no mercado?</p>
+
+        <div class="hardware-grid">
+          <!-- Item 1: Vision Pro -->
+          <div class="hw-card">
+            <div class="hw-top">
+              <span class="hw-badge apple">APPLE VISION PRO</span>
+              <span class="hw-price">Premium</span>
+            </div>
+            <div class="hw-body">
+              <h4>Computação Espacial Avançada</h4>
+              <p>Displays Micro-OLED 4K em cada olho. Câmeras externas com passthrough quase perfeito para projetar telas, dados e modelos 3D ao redor do usuário.</p>
+              <div class="hw-specs">
+                <span>Foco: Produtividade & Multimídia</span>
+                <span>Controle: Olhos e Mãos</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2: HoloLens 2 -->
+          <div class="hw-card highlight-hw">
+            <div class="hw-top">
+              <span class="hw-badge ms">MICROSOFT HOLOLENS 2</span>
+              <span class="hw-price">Corporativo</span>
+            </div>
+            <div class="hw-body">
+              <h4>O Veterano da Indústria</h4>
+              <p>Lentes transparentes verdadeiras (visão ótica direta). O mais utilizado por indústrias, forças de defesa e cirurgiões para integrar com sensores IoT via nuvem.</p>
+              <div class="hw-specs">
+                <span>Foco: Indústria 4.0 & Medicina</span>
+                <span>Visor articulado para cima</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3: Meta Ray-Ban & Quest 3 -->
+          <div class="hw-card">
+            <div class="hw-top">
+              <span class="hw-badge meta">META RAY-BAN / QUEST 3</span>
+              <span class="hw-price">Consumidor</span>
+            </div>
+            <div class="hw-body">
+              <h4>Acessibilidade & IA Integrada</h4>
+              <p>Os óculos Ray-Ban possuem câmeras e IA por voz para ler o ambiente; já o Quest 3 traz passthrough colorido para misturar o mundo físico com dados.</p>
+              <div class="hw-specs">
+                <span>Foco: Dia a dia & Preço acessível</span>
+                <span>Design de armação comum (Ray-Ban)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 4: XREAL Air -->
+          <div class="hw-card">
+            <div class="hw-top">
+              <span class="hw-badge xreal">XREAL AIR / MAGIC LEAP</span>
+              <span class="hw-price">Portátil</span>
+            </div>
+            <div class="hw-body">
+              <h4>Ultraleves & Conectados</h4>
+              <p>Pesam menos de 80 gramas, conectam direto ao celular ou notebook via USB-C e projetam uma tela virtual flutuante gigante de telemetria.</p>
+              <div class="hw-specs">
+                <span>Foco: Portabilidade diária</span>
+                <span>Visual discreto como óculos de sol</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-observation">
+          <strong>Tendência atual:</strong> Os aparelhos estão diminuindo de tamanho, ficando mais leves e saindo de capacetes pesados para armações finas de óculos normais.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 7: VANTAGENS DE UNIR RA + IOT ==================== -->
+    <section class="slide" data-index="7">
+      <div class="slide-content">
+        <h2 class="slide-heading">VANTAGENS ESTRATÉGICAS DE UNIR RA + IOT</h2>
+        <p class="slide-subtitle">Por que governos e empresas investem bilhões nessa combinação?</p>
+
+        <div class="benefits-grid">
+          <div class="benefit-box">
+            <div class="b-number">01</div>
+            <div class="b-content">
+              <h4>Tomada de Decisão Instantânea</h4>
+              <p>O trabalhador não precisa deduzir o que está acontecendo: a condição exata da máquina está pintada na frente dos seus olhos.</p>
+            </div>
+          </div>
+
+          <div class="benefit-box">
+            <div class="b-number">02</div>
+            <div class="b-content">
+              <h4>Redução Drástica de Falhas Humanas</h4>
+              <p>Instruções passo a passo ancoradas na peça correta impedem que o operador desmonte a parte errada ou esqueça uma etapa crítica.</p>
+            </div>
+          </div>
+
+          <div class="benefit-box">
+            <div class="b-number">03</div>
+            <div class="b-content">
+              <h4>Segurança do Operador em Áreas de Risco</h4>
+              <p>Sensores detectam radiação, vazamentos invisíveis de gás ou choques elétricos, e a RA pinta o perigo em vermelho antes que a pessoa se aproxime.</p>
+            </div>
+          </div>
+
+          <div class="benefit-box">
+            <div class="b-number">04</div>
+            <div class="b-content">
+              <h4>Treinamento Muito Mais Rápido</h4>
+              <p>Novos profissionais aprendem a consertar equipamentos praticando com hologramas guiados e dados reais de sensores, acelerando o aprendizado.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-metric-bar">
+          <div class="metric-pill">
+            <span class="m-val">Economia</span>
+            <span class="m-sub">Menos paradas de fábrica não planejadas</span>
+          </div>
+          <div class="metric-pill">
+            <span class="m-val">Ergonomia</span>
+            <span class="m-sub">Trabalho contínuo sem soltar ferramentas</span>
+          </div>
+          <div class="metric-pill">
+            <span class="m-val">Colaboração</span>
+            <span class="m-sub">Especialistas remotos compartilhando o mesmo olhar</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 8: O FUTURO ==================== -->
+    <section class="slide" data-index="8">
+      <div class="slide-content">
+        <h2 class="slide-heading">COMO ESSA TECNOLOGIA SERÁ USADA NO FUTURO?</h2>
+        <p class="slide-subtitle">Para onde a tecnologia está caminhando nos próximos 5 a 10 anos?</p>
+
+        <div class="cards-layout three-col">
+          <div class="future-card">
+            <div class="future-year">PASSO 1</div>
+            <h3>Lentes de Contato de RA</h3>
+            <p>Adeus aos óculos grandes: pesquisas com microdisplays em lentes de contato já testam projetar dados biométricos e telemetria diretamente na retina.</p>
+            <div class="future-tag">COMPUTAÇÃO INVISÍVEL</div>
+          </div>
+
+          <div class="future-card highlight-card">
+            <div class="future-year">PASSO 2</div>
+            <h3>IA Generativa como Copiloto</h3>
+            <p>A Inteligência Artificial analisa os dados dos sensores IoT antes do humano e projeta um assistente holográfico inteligente guiando a manutenção em tempo real.</p>
+            <div class="future-tag">IA + RA + IOT CONVERGENTES</div>
+          </div>
+
+          <div class="future-card">
+            <div class="future-year">PASSO 3</div>
+            <h3>Cidades Inteligentes Vivas</h3>
+            <p>Ruas inteiras com semáforos, prédios e veículos autônomos comunicando telemetria que pedestres e motoristas enxergam direto em seus visores holográficos.</p>
+            <div class="future-tag">SMART CITIES TOTAIS</div>
+          </div>
+        </div>
+
+        <div class="starwars-analogy">
+          <p>
+            Com <strong>5G/6G, sensores IoT cada vez menores e processadores mais potentes</strong>, a fronteira entre o mundo físico e o digital tende a desaparecer.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 9: HORA DA PRÁTICA (QR CODE) ==================== -->
+    <section class="slide" data-index="9">
+      <div class="slide-content pratica-slide">
+        <h2 class="slide-heading">HORA DA PRÁTICA</h2>
+        <p class="slide-subtitle">Peguem o celular: vamos colocar uma turbina inteligente na mesa de vocês.</p>
+
+        <div class="pratica-layout">
+          <div class="qr-area">
+            <div class="qr-moldura" id="qrCode"></div>
+            <span class="qr-link" id="qrLink"></span>
+          </div>
+
+          <div class="pratica-passos">
+            <div class="passo">
+              <span class="passo-num">1</span>
+              <div>
+                <h4>Escaneie o QR Code</h4>
+                <p>Abra a câmera do celular e aponte para o código ao lado.</p>
+              </div>
+            </div>
+            <div class="passo">
+              <span class="passo-num">2</span>
+              <div>
+                <h4>Toque em "Ver na minha mesa"</h4>
+                <p>Aponte para o chão ou para a mesa e mova o celular devagar.</p>
+              </div>
+            </div>
+            <div class="passo">
+              <span class="passo-num">3</span>
+              <div>
+                <h4>Leia os sensores IoT</h4>
+                <p>Temperatura, rotação, vibração e energia aparecem sobre a turbina em tempo real.</p>
+              </div>
+            </div>
+            <div class="passo passo-alerta">
+              <span class="passo-num">4</span>
+              <div>
+                <h4>Simule uma falha</h4>
+                <p>Veja a RA reagir na hora: a turbina acelera e os dados ficam vermelhos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 10: CONCLUSÃO & PERGUNTAS ==================== -->
+    <section class="slide" data-index="10">
+      <div class="slide-content conclusion-slide">
+        <h2 class="slide-heading">OBRIGADO</h2>
+        <p class="slide-subtitle">"O futuro já está diante dos nossos olhos."</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="qrcode.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
